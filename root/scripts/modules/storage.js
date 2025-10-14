@@ -10,7 +10,7 @@ export function saveBest(ms){
   }catch(e){ return null; }
 }
 export function setLinks(){
-  const url = window.location.href; const enc = encodeURIComponent(url);
+  const url = window.location.href; const enc = encodeURIComponent(https://plateplate.github.io/project-bravo/);
   document.getElementById('linkNu').href = `https://validator.w3.org/nu/?doc=${enc}`;
-  document.getElementById('linkWave').href = `https://wave.webaim.org/report#/${url}`;
+  document.getElementById('linkWave').href = `https://wave.webaim.org/report#/${https://plateplate.github.io/project-bravo/}`;
 }
