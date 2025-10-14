@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SnapTest — Reaction Time Game</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/game.css">
+  <script type="module" src="scripts/main.js" defer></script>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">SnapTest</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="mainNav" class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <button id="btnPlay" class="btn btn-light me-2" type="button">Play / Reset</button>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#howToPlay" type="button">How to Play</button>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" id="linkProfile" href="https://plateplate.github.io/alpha-project/" target="_blank" rel="noopener">Dev Profile</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container my-4">
+    <div class="row g-4">
+      <!-- Game board -->
+      <section class="col-12 col-lg-7">
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h1 class="h5 mb-0">Reaction Pad</h1>
+          </div>
+          <div class="card-body">
+            <div id="pad" class="pad" role="button" tabindex="0" aria-describedby="padHelp" aria-live="polite">
+              <p id="padText" class="fw-semibold m-0">Press Play/Reset to begin</p>
+            </div>
+            <p id="padHelp" class="form-text mt-2">Wait for GO, then click as fast as you can</p>
+            <div class="d-flex gap-2 mt-3">
+              <button id="btnCancel" class="btn btn-outline-secondary" type="button">Cancel Round</button>
+              <button id="btnTheme" class="btn btn-outline-primary" type="button">Toggle Theme</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Score + Settings -->
+      <aside class="col-12 col-lg-5">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h2 class="h6 mb-0">Stats</h2>
+          </div>
+          <div class="card-body">
+            <dl class="row mb-0">
+              <dt class="col-6">Player</dt><dd id="outPlayer" class="col-6">—</dd>
+              <dt class="col-6">Last Time</dt><dd id="outLast" class="col-6">—</dd>
+              <dt class="col-6">Best Time</dt><dd id="outBest" class="col-6">—</dd>
+              <dt class="col-6">Attempts</dt><dd id="outAttempts" class="col-6">0</dd>
+            </dl>
+            <div class="progress mt-3" role="progressbar" aria-label="Attempts used" aria-valuemin="0" aria-valuemax="10">
+              <div id="bar" class="progress-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h2 class="h6 mb-0">Settings</h2>
+          </div>
+          <div class="card-body">
+            <form id="formSettings" novalidate>
+              <div class="mb-3">
+                <label for="playerName" class="form-label">Player Name</label>
+                <input id="playerName" class="form-control" name="playerName" type="text" required minlength="2" maxlength="20" pattern="^[A-Za-z0-9 _-]+$" aria-describedby="nameHelp">
+                <div class="invalid-feedback">Enter 2–20 letters, numbers, spaces, underscores, or hyphens</div>
+                <div id="nameHelp" class="form-text">Saved to your browser storage</div>
+              </div>
+              <div class="mb-3">
+                <label for="difficulty" class="form-label">Difficulty</label>
+                <select id="difficulty" class="form-select" name="difficulty" required>
+                  <option value="easy">Easy</option>
+                  <option value="normal" selected>Normal</option>
+                  <option value="hard">Hard</option>
+                </select>
+                <div class="invalid-feedback">Choose a difficulty</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Theme</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="theme" id="themeLight" value="light" checked>
+                  <label class="form-check-label" for="themeLight">Light</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="theme" id="themeDark" value="dark">
+                  <label class="form-check-label" for="themeDark">Dark</label>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-primary" type="submit">Save Settings</button>
+                <button id="btnClear" class="btn btn-outline-danger" type="button">Clear Saved Data</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Live region for accessible updates -->
+    <p id="live" class="visually-hidden" aria-live="polite"></p>
+  </main>
+
+  <footer class="container my-4 pt-3 border-top">
+    <div class="d-flex flex-wrap gap-3">
+      <a id="linkRepo" href="#" target="_blank" rel="noopener">Game Repo</a>
+      <a id="linkNu" href="#" target="_blank" rel="noopener">Nu HTML Validator</a>
+      <a id="linkWave" href="#" target="_blank" rel="noopener">WAVE Accessibility</a>
+      <a href="https://github.com/plateplate" target="_blank" rel="noopener">My GitHub</a>
+    </div>
+  </footer>
+
+  <!-- How to Play Modal -->
+  <div class="modal fade" id="howToPlay" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5">How to Play</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ol>
+            <li>Press Play, wait for the pad to say GO</li>
+            <li>Click the pad or press Space as fast as you can</li>
+            <li>Your best time is saved locally</li>
+          </ol>
+          <p class="mb-0"><strong>Tip</strong> Open the console for an easter egg hint</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-bs-dismiss="modal" type="button">Got it</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
